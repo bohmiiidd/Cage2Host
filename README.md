@@ -413,7 +413,7 @@ complex_payload='command1 | \
 # Standard format
 vector_name=relative/path/to/exploit.sh
 
-# Examples
+## Examples
 docker_socket=bin/socket-escape.sh
 privileged_container=bin/privileged-breakout.sh
 kubelet_rw=modules/kubernetes/kubelet-rw-escape.sh
@@ -678,21 +678,6 @@ Output:
 * Bash: `#!/usr/bin/env bash`
 * Python 3: `#!/usr/bin/env python3`
 * Go compiled binary: no shebang needed (ensure executable)
-
-```
-
-```
-
-## 🛣️ Roadmap
-
-- [ ] Kubernetes exploitation modules (kubelet, API server)
-- [ ] Advanced persistence mechanisms
-- [ ] Encrypted C2 channel support
-- [ ] Windows container escape techniques
-- [ ] Integration with Metasploit Framework
-- [ ] Web-based management interface
-- [ ] Real-time monitoring and alerting
-- [ ] Automated vulnerability assessment
 
 ---
 
