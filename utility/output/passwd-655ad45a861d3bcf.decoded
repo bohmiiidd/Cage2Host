@@ -1,0 +1,54 @@
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/run/ircd:/usr/sbin/nologin
+_apt:x:42:65534::/nonexistent:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:998:998:systemd Network Management:/:/usr/sbin/nologin
+mysql:x:100:107:MySQL Server,,,:/nonexistent:/bin/false
+tss:x:101:108:TPM software stack,,,:/var/lib/tpm:/bin/false
+strongswan:x:102:65534::/var/lib/strongswan:/usr/sbin/nologin
+systemd-timesync:x:997:997:systemd Time Synchronization:/:/usr/sbin/nologin
+Debian-exim:x:103:110::/var/spool/exim4:/usr/sbin/nologin
+uuidd:x:104:111::/run/uuidd:/usr/sbin/nologin
+debian-tor:x:105:112::/var/lib/tor:/bin/false
+miredo-server:x:106:65534::/var/run/miredo-server:/usr/sbin/nologin
+iodine:x:107:65534::/run/iodine:/usr/sbin/nologin
+messagebus:x:108:113::/nonexistent:/usr/sbin/nologin
+miredo:x:109:65534::/var/run/miredo:/usr/sbin/nologin
+postgres:x:110:116:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash
+arpwatch:x:111:117:ARP Watcher,,,:/var/lib/arpwatch:/bin/sh
+usbmux:x:112:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin
+tcpdump:x:113:119::/nonexistent:/usr/sbin/nologin
+stunnel4:x:996:996:stunnel service system account:/var/run/stunnel4:/usr/sbin/nologin
+sshd:x:114:65534::/run/sshd:/usr/sbin/nologin
+dnsmasq:x:999:65534:dnsmasq:/var/lib/misc:/usr/sbin/nologin
+sslh:x:115:121::/nonexistent:/usr/sbin/nologin
+_flatpak:x:116:123:Flatpak system-wide installation helper,,,:/nonexistent:/usr/sbin/nologin
+avahi:x:117:124:Avahi mDNS daemon,,,:/run/avahi-daemon:/usr/sbin/nologin
+inetsim:x:118:125::/var/lib/inetsim:/usr/sbin/nologin
+pulse:x:119:127:PulseAudio daemon,,,:/run/pulse:/usr/sbin/nologin
+saned:x:120:130::/var/lib/saned:/usr/sbin/nologin
+beef-xss:x:121:131::/var/lib/beef-xss:/usr/sbin/nologin
+lightdm:x:122:132:Light Display Manager:/var/lib/lightdm:/bin/false
+geoclue:x:123:133::/var/lib/geoclue:/usr/sbin/nologin
+polkitd:x:994:994:polkit:/nonexistent:/usr/sbin/nologin
+rtkit:x:124:134:RealtimeKit,,,:/proc:/usr/sbin/nologin
+colord:x:125:135:colord colour management daemon,,,:/var/lib/colord:/usr/sbin/nologin
+nm-openvpn:x:126:136:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+nm-openconnect:x:127:137:NetworkManager OpenConnect plugin,,,:/var/lib/NetworkManager:/usr/sbin/nologin
+b7z:x:1000:1001:b7z:/home/b7z:/usr/bin/zsh
+fwupd-refresh:x:128:138:fwupd-refresh user,,,:/run/systemd:/usr/sbin/nologin
+Debian-gdm:x:129:140:Gnome Display Manager:/var/lib/gdm3:/bin/false
