@@ -11,7 +11,7 @@
 [![Bash](https://img.shields.io/badge/bash-4.0%2B-green.svg)](https://www.gnu.org/software/bash/)
 [![Platform](https://img.shields.io/badge/platform-linux-lightgrey.svg)](https://www.kernel.org/)
 
-[Features](#-core-features) • [Architecture](#-architecture) • [Installation](#-installation) • [Documentation](#-documentation) • [Examples](#-tactical-examples)
+[Features](#-core-features) • [Installation](#-installation) • [Documentation](#-documentation) 
 
 </div>
 
@@ -68,44 +68,6 @@ The framework abstracts the complexity of container breakout techniques into reu
 
 ---
 
-## 🏗️ Architecture
-
-### System Design
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                      cage2host Framework                    │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  ┌──────────────────┐              ┌──────────────────┐     │
-│  │   Utility Mode   │              │   Random Mode    │     │
-│  │                  │              │                  │     │
-│  │ • Payload Engine │              │ • Direct Exec    │     │
-│  │ • Template Inject│              │ • Auto-chaining  │     │
-│  │ • Task Automation│              │ • Module Scanner │     │
-│  └────────┬─────────┘              └────────┬─────────┘     │
-│           │                                  │              │
-│           └──────────────┬───────────────────┘              │
-│                          ▼                                  │
-│           ┌──────────────────────────────┐                  │
-│           │    Exploitation Core Layer   │                  │
-│           │                              │                  │
-│           │ • Route Manager              │                  │
-│           │ • Config Parser              │                  │
-│           │ • Output Handler             │                  │
-│           └──────────────┬───────────────┘                  │
-│                          ▼                                  │
-│           ┌──────────────────────────────┐                  │
-│           │      Exploit Modules         │                  │
-│           │                              │                  │
-│           │ ├─ Docker Socket Exploits    │                  │
-│           │ ├─ Privileged Container Esc  │                  │
-│           │ ├─ Mount-based Techniques    │                  │
-│           │ └─ Custom User Modules       │                  │
-│           └──────────────────────────────┘                  │
-└─────────────────────────────────────────────────────────────┘
-```
-
 ### Component Overview
 
 | Component | Purpose | Location |
@@ -135,18 +97,18 @@ The framework abstracts the complexity of container breakout techniques into reu
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/cage2host.git
+git clone https://github.com/bohmiiidd/cage2host.git
 cd cage2host
 
 # Set permissions
 chmod +x start.sh utility/utility.sh bin/*.sh
 
-# Install dependencies and build
+# Install modules and build
 make install
 make build
 
 # Verify installation
-./start.sh --help
+./start.sh --list-modules
 # or using builded binary
 ./escaper
 ```
@@ -272,11 +234,11 @@ dump_ssh='tar czf - /host/root/.ssh /host/home/*/.ssh 2>/dev/null | base64 -w0'
 # Initial system enumeration
 ./escaper --utility-mode  --vuln socket --run
 
-# Network discovery
+# Direct command execution 
 ./escaper --utility-mode  --vuln privileged_container --cmd "ip route; arp -a; netstat -tuln"
 
 # Process enumeration
-./escaper --vuln socket --cmd "ps auxf; systemctl list-units"
+./escaper --vuln privilege --cmd "ps auxf; systemctl list-units"
 ```
 
 #### Credential Harvesting
@@ -376,48 +338,44 @@ cp bin/privileged-escape.sh modules/auto-mode/02-exploit.sh
 cp bin/establish-persistence.sh modules/auto-mode/03-persist.sh
 
 # Execute chain
-./start.sh --random-mode --auto
+./escaper --random-mode --auto
 ```
-
 ---
 
-## 🔧 Advanced Configuration
+# Universal Module Runner
 
-### Payload Configuration (`config/payload.conf`)
+This script allows you to execute any type of file — Bash, Python, Go, compiled binaries, etc. — using the interpreter specified in its shebang. It is designed to be part of the `escaper2` toolkit but can also be used standalone or in utility mode.
 
-#### Syntax
-
-```bash
-# Single-line payloads
-payload_name='command string with {{VARIABLES}}'
-
-# Multi-line payloads (using backslash continuation)
-complex_payload='command1 | \
-  command2 | \
-  command3 {{VARIABLE}}'
-
-# Commented payloads (disabled)
-#disabled_payload='will not be loaded'
-```
-
-#### Best Practices
-
-1. **Idempotency**: Design payloads to be safely re-executable
-2. **Error Handling**: Include fallback logic for failed operations
-3. **Stealth**: Minimize command output and system modifications
-4. **Atomicity**: Ensure commands complete or fail cleanly
-
-### Vulnerability Configuration (`config/vuln.conf`)
+### Run any file format
 
 ```bash
-# Standard format
-vector_name=relative/path/to/exploit.sh
+./start.sh --random-mode --module MOD-001 script.py
+````
 
-## Examples
-docker_socket=bin/socket-escape.sh
-privileged_container=bin/privileged-breakout.sh
-kubelet_rw=modules/kubernetes/kubelet-rw-escape.sh
+**Example:**
+
+```bash
+./start.sh --random-mode --module MOD-001 black.go
 ```
+
+Output:
+
+```
+[INFO] Running file using its shebang → /home/b7z/project/escaper2/modules/unix-socket/bin/black.py
+[ERROR] Missing shebang.
+The script cannot be auto-executed without specifying interpreter.
+Add something like:
+  #!/usr/bin/env python3
+  #!/usr/bin/env bash
+```
+---
+
+## Example Shebangs
+
+* Bash: `#!/usr/bin/env bash`
+* Python 3: `#!/usr/bin/env python3`
+* Go compiled binary: no shebang needed (ensure executable)
+---
 
 ### Route Configuration (`config/routes.conf`)
 
@@ -467,17 +425,14 @@ source "$BASE_DIR/themes/theme.sh" 2>/dev/null || true
 utility-exec-function() {
     local encoded_command="$*"
     
-    # Decode base64 command
+    # Decode base64 command is required 
     local decoded_command
     decoded_command=$(printf "%s" "$encoded_command" | base64 --decode)
     
     info "[*] Executing: $decoded_command"
     
-    # ============================================================
-    # INSERT EXPLOITATION LOGIC HERE
-    # ============================================================
-    
-    # Example: Execute via docker socket
+    # call the exploit method here ..
+   
     local output
     output=$(your_exploitation_method "$decoded_command" 2>&1)
     
@@ -586,101 +541,6 @@ source themes/custom-theme.sh
 
 ---
 
-## 🚨 Known Limitations
-
-- **Docker API Dependency**: Socket-based exploits require Docker API access
-- **Kernel Compatibility**: Some techniques require specific kernel versions
-- **Detection Risk**: Active exploitation may trigger security monitoring
-- **Network Constraints**: Reverse shells require outbound connectivity
-- **Resource Overhead**: Some exploits may impact system performance
-
----
-# Universal Module Runner
-
-This script allows you to execute any type of file — Bash, Python, Go, compiled binaries, etc. — using the interpreter specified in its shebang. It is designed to be part of the `escaper2` toolkit but can also be used standalone.
-
----
-
-## Usage
-
-### Run any file format
-
-```bash
-./start.sh --random-mode --module MOD-001 path/to/script.py
-````
-
-**Example:**
-
-```bash
-./start.sh --random-mode --module MOD-001 unix-socket/bin/black.go
-```
-
-Output:
-
-```
-[INFO] Running file using its shebang → /home/b7z/project/escaper2/modules/unix-socket/bin/black.py
-[ERROR] Missing shebang.
-The script cannot be auto-executed without specifying interpreter.
-Add something like:
-  #!/usr/bin/env python3
-  #!/usr/bin/env bash
-```
-
----
-
-### Handle directories
-
-If a directory is given instead of a file, the runner will report an error:
-
-```bash
-./start.sh --random-mode --module MOD-001 unix-socket/bin/
-```
-
-Output:
-
-```
-[ERROR] File not found: unix-socket/bin/
-[DEBUG] Looked in: /home/b7z/project/escaper2/modules/unix-socket/bin/
-```
-
----
-
-## Requirements
-
-* The file must exist and be readable.
-* Scripts require a valid shebang (e.g., `#!/usr/bin/env python3` or `#!/usr/bin/env bash`).
-* Executable bit is automatically set if missing.
-
----
-
-## Features
-
-* Supports any type of script or binary file.
-* Automatically resolves paths relative to the project root.
-* Provides informative error messages:
-
-  * Missing file
-  * Directory instead of file
-  * Missing shebang
-* Runs the file exactly as the system would using the shebang interpreter.
-
----
-
-## Notes
-
-* If the script fails with “Missing shebang,” you must add a shebang line at the top of the file.
-* Paths are resolved relative to the project root, so you can pass files like `modules/unix-socket/bin/black.py`.
-
----
-
-## Example Shebangs
-
-* Bash: `#!/usr/bin/env bash`
-* Python 3: `#!/usr/bin/env python3`
-* Go compiled binary: no shebang needed (ensure executable)
-
----
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please follow these guidelines:
@@ -692,21 +552,6 @@ Contributions are welcome! Please follow these guidelines:
 5. **Push** to your branch (`git push origin feature/amazing-exploit`)
 6. **Open** a Pull Request with detailed description
 
-### Development Setup
-
-```bash
-# Clone your fork
-git clone https://github.com/yourusername/cage2host.git
-cd cage2host
-
-# Create development branch
-git checkout -b dev/your-feature
-
-# Run tests
-make test
-
-# Submit PR when ready
-```
 
 ---
 
@@ -715,24 +560,11 @@ make test
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 **Disclaimer**: The authors and contributors assume no liability for misuse or damage caused by this software. Users are solely responsible for compliance with applicable laws and regulations.
-
-
-## 📚 Additional Resources
-
-- [Container Security Best Practices](https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html)
-- [Docker Security Documentation](https://docs.docker.com/engine/security/)
-- [Kubernetes Security Guide](https://kubernetes.io/docs/concepts/security/)
-- [CIS Docker Benchmark](https://www.cisecurity.org/benchmark/docker)
-
----
-
-<div align="center">
-
 **cage2host** - *Break Free, Stay Hidden*
 
 Made with ⚡ by security researchers, for security researchers
 
-[Report Bug](https://github.com/yourusername/cage2host/issues) • [Request Feature](https://github.com/yourusername/cage2host/issues) • [Documentation](https://github.com/yourusername/cage2host/wiki)
+[Report Bug](https://github.com/bohmiiidd/cage2host/issues) • [Request Feature](https://github.com/bohmiiidd/cage2host/issues) • [Documentation](https://github.com/bohmiiid/cage2host/wiki)
 
 </div
 
